@@ -1,0 +1,98 @@
+@startuml usecase
+
+' ------------------------------ 設定
+hide circle
+skinparam linetype ortho
+skinparam monochrome true
+skinparam shadowing false
+
+' ------------------------------ マスタテーブル
+entity users {
+  + id
+  --
+  first_name
+  last_name
+  email
+  # status_id
+}
+
+entity user_status {
+  + id
+  --
+  value
+}
+
+entity pairs {
+  + id
+  --
+  pair_name
+}
+
+entity teams {
+  + id
+  --
+  team_name
+}
+
+entity affiliations {
+  + id
+  --
+  # team_id
+  # pair_id
+}
+
+entity admins {
+  + id
+  --
+  first_name
+  last_name
+  email
+}
+
+entity tasks {
+  + id
+  --
+  # task_category_id
+  task_title
+  task_description
+}
+
+entity task_status {
+  + id
+  --
+  value
+}
+
+entity task_categories {
+  + id
+  --
+  value
+}
+
+' ------------------------------ 中間テーブル
+entity user_affiliation {
+  # user_id
+  # affiliation_id
+}
+
+entity user_task_progress {
+  # user_id
+  # task_id
+  # task_status_id
+  --
+}
+
+' ------------------------------ リレーション
+users }|--|| user_status
+teams ||--|{ affiliations
+pairs ||--|| affiliations
+users ||--|| user_affiliation
+affiliations ||--|{ user_affiliation
+
+
+users ||--o{ user_task_progress
+tasks }|--|| task_categories
+tasks }|--|| user_task_progress
+task_status ||--o{ user_task_progress
+
+@enduml
